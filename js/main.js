@@ -62,6 +62,8 @@ const renderCard = response => {
 
     });
 };
+
+
 const renderStartPage = () => {
     tvShows.append(loading);
     new DBService().getPopular().then(renderCard);
@@ -70,6 +72,7 @@ const renderStartPage = () => {
 renderStartPage();
 
 
+//Поиск
 searchForm.addEventListener('submit', event => {
     event.preventDefault();
     document.querySelector('.tv-shows__head').textContent = `Результат поиска по запросу "${searchFormInput.value}"`;
@@ -92,6 +95,7 @@ hamburger.addEventListener('click', () => {
     hamburger.classList.toggle('open');
 });
 
+
 //Закрыть левое меню при клике вне меню
 document.addEventListener('click', event => {
     if(!event.target.closest('.left-menu')){ //!!!!!!!!!!!!!!!!!ПОЛЕЗНО
@@ -100,6 +104,8 @@ document.addEventListener('click', event => {
     }
 });
 
+
+//Обработчики кнопок левого окна
 leftMenuTopRated.addEventListener('click',() => {
     document.querySelector('.tv-shows__head').textContent = `Лучшее`;
     new DBService().getTopRated().then(renderCard);
@@ -115,12 +121,15 @@ leftMenu.addEventListener('click', event => {
         hamburger.classList.add('open');
     }
 });
-
 leftMenuSearch.addEventListener('click',() => {
     document.querySelector('.tv-shows__head').textContent = '';
     tvShowsList.textContent = '';
 });
-
+leftMenuPopular.addEventListener('click',() => {
+    document.querySelector('.tv-shows__head').textContent = `Популярное`;
+    new DBService().getPopular().then(renderCard);
+});
+//Работа с модальным окном
 tvShowsList.addEventListener('click', event => {
     event.preventDefault();
     preloader.style = 'display:block';
@@ -161,6 +170,8 @@ modal.addEventListener('click', event => {
     }
 });
 
+
+//Смена постера при наведении
 const changeImage = event => {
     const card = event.target.closest('.tv-shows__item');
 
@@ -171,18 +182,17 @@ const changeImage = event => {
         }
     }
 };
+tvShowsList.addEventListener('mouseover', changeImage);
+tvShowsList.addEventListener('mouseout', changeImage);
 
+
+//Открывает популярное при клике на название сайта
 mainTitle.addEventListener("click", () => {
     document.querySelector('.tv-shows__head').textContent = `Популярное`;
     tvShowsList.textContent = '';
-    renderStartPage();
+    renleftMenuPopular.addEventListener('click',() => {
+        document.querySelector('.tv-shows__head').textContent = `Популярное`;
+        new DBService().getPopular().then(renderCard);
+    });derStartPage();
     loading.remove();
 });
-
-leftMenuPopular.addEventListener('click',() => {
-    document.querySelector('.tv-shows__head').textContent = `Популярное`;
-    new DBService().getPopular().then(renderCard);
-});
-
-tvShowsList.addEventListener('mouseover', changeImage);
-tvShowsList.addEventListener('mouseout', changeImage);
